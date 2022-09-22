@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_set>
 #include <array>
+#include <cstdlib>
 
 // 1.two sum
 #ifdef TWO_SUM
@@ -225,7 +226,192 @@ public:
 };
 #endif
 
+// 6.Zigzag Conversion
+#ifdef ZIG_ZAG
+class Solution {
+public:
+    std::string convert(std::string s, int numRows) {
+
+        if(numRows == 1) return s;
+
+        std::vector<std::string> rows(numRows);
+
+        bool isDown = true;
+        uint16_t i = 0;
+
+        uint8_t pick = numRows - 1;
+
+        for (auto ch : s) {
+            if(isDown)
+                rows[i++].push_back(ch);
+            else
+                rows[i--].push_back(ch);
+
+            if (i == 0 || i == pick)
+                isDown = !isDown;
+
+        }
+
+        std::string res;
+
+        for (auto& str : rows) {
+            res += str;
+        }
+
+        return res;
+    }
+};
+#endif
+
+
+// 7. Reverse Integer
+#ifdef REVERSE_INTEGER
+class Solution {
+public:
+    int reverse(int x) {
+        int res = 0;
+
+        int maxIntDivTen = INT_MAX / 10;
+        int minIntDivTen = INT_MIN / 10;
+
+        int8_t mod = 0;
+
+        while (x != 0) {
+            mod = x % 10;
+
+            x /= 10;
+
+            if (res > maxIntDivTen || (res == maxIntDivTen && mod > 7)) return 0;
+            if (res < minIntDivTen || (res == minIntDivTen && mod < -8)) return 0;
+
+            res = res * 10 + mod;
+        }
+
+        return res;
+    }
+};
+#endif
+
+// 8. String to Integer (atoi)
+#ifdef STR_TO_INT_ATOI
+class Solution {
+public:
+    int myAtoi(std::string s) {
+
+        int32_t maxIntDivTen = INT_MAX / 10;
+        int32_t minIntDivTen = INT_MIN / 10;
+
+        int32_t res = 0;
+        uint8_t idx = 0;
+
+        uint8_t size = s.size();
+
+        while (s[idx] == ' ' && idx != size) ++idx;
+
+        int8_t negativeCoef = 1;
+
+        if(idx == size) return 0;
+        else if (s[idx] == '-') {negativeCoef = -1; ++idx;}
+        else if (s[idx] == '+') {++idx;}
+
+        if (s[idx] < '0' || s[idx] > '9') return 0;
+
+        uint8_t mod = 0;
+
+        while (s[idx] >= '0' && s[idx] <= '9') {
+
+            mod = s[idx] - '0';
+
+            if (res > maxIntDivTen || (res == maxIntDivTen && mod > 7)) return INT_MAX;
+            if (res < minIntDivTen || (res == minIntDivTen && mod > 8)) return INT_MIN;
+
+            res = res * 10 + mod * negativeCoef;
+
+            ++idx;
+        }
+
+        return res;
+    }
+};
+#endif
+
+//9. Palindrome Number
+#ifdef PALINDROME_NUMBER
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if (x < 0) return false;
+
+        std::string strX (std::to_string(x));
+
+        uint32_t start = 0, end = 0;
+
+        uint32_t size = (strX.size() - 1);
+
+        uint32_t mid =  size / 2;
+
+        if (strX.size() % 2 == 0) {start = mid; end = mid + 1;}
+        else {start = mid; end = mid;}
+
+        while (start >= 0 && end <= size) {
+            if (strX[start] != strX[end]) break;
+            --start;
+            ++end;
+        }
+
+        if (start < 0 || end > size) return true;
+        else return false;
+    }
+};
+#endif
+
+class Solution {
+public:
+    bool isMatch(std::string s, std::string p) {
+        bool matched = true;
+
+        uint32_t sizeP = p.size();
+        uint32_t sizeS = s.size();
+
+
+        uint32_t idxP = 0, idxS = 0;
+        for (; idxP < sizeP && idxS < sizeS; ++idxP, ++idxS) {
+
+            if (p[idxP] >= 'a' && p[idxP] <= 'z' && p[idxP + 1] == '*') {
+                while (s[idxS] == p[idxP] && s[idxS] != '\0')
+                    ++idxS;
+                ++idxP;
+                --idxS;
+                continue;
+            }
+
+            if (p[idxP] == '.')
+                if (s[idxS] < 'a' || s[idxS] > 'z') {
+                    matched = false;
+                    break;
+                }
+            else if (p[idxP] >= 'a' && p[idxP] <= 'z') {
+                if (s[idxS] != p[idxP]) {
+                    matched = false;
+                    break;
+                }
+            }
+        }
+
+        if (idxS < sizeS || idxP < sizeP) matched = false;
+
+        return matched;
+    }
+};
+
 int main() {
+
+
+    std::string s ("aaa");
+    std::string p ("ab*a*c*a");
+    Solution sol;
+    bool res = sol.isMatch(s, p);
+std::cout << res;
 
     return 0;
 }
