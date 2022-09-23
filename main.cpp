@@ -365,6 +365,8 @@ public:
 };
 #endif
 
+// 10. Regular Expression Matching
+#ifdef REGULAR_EXPRESSION
 class Solution {
 public:
     bool isMatch(std::string s, std::string p) {
@@ -403,15 +405,46 @@ public:
         return matched;
     }
 };
+#endif
+
+class Solution {
+public:
+    int maxArea(std::vector<int>& height) {
+
+        uint32_t size = height.size();
+
+        uint32_t start = 0, end = size - 1;
+
+        uint32_t maxSquare = 0;
+
+        for (uint32_t i = 0; i < size; ++i) {
+            //if (start >= end) break;
+
+            uint32_t curHeight = std::min(height[start], height[end]);
+
+            if (curHeight * (end - start) > maxSquare)
+                maxSquare = curHeight * (end - start);
+
+
+            if (height[start] <= height[end]) ++start;
+            else --end;
+
+        }
+
+        return maxSquare;
+
+    }
+};
+
+
 
 int main() {
 
 
-    std::string s ("aaa");
-    std::string p ("ab*a*c*a");
+    std::vector<int> vec = {1,3,2,5,25,24,5};
     Solution sol;
-    bool res = sol.isMatch(s, p);
-std::cout << res;
+    uint32_t res = sol.maxArea(vec);
+    std::cout << res;
 
     return 0;
 }
