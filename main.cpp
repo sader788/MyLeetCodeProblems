@@ -407,6 +407,8 @@ public:
 };
 #endif
 
+// 11. Container With Most Water
+#ifdef MOST_WATER
 class Solution {
 public:
     int maxArea(std::vector<int>& height) {
@@ -418,13 +420,10 @@ public:
         uint32_t maxSquare = 0;
 
         for (uint32_t i = 0; i < size; ++i) {
-            //if (start >= end) break;
-
             uint32_t curHeight = std::min(height[start], height[end]);
 
             if (curHeight * (end - start) > maxSquare)
                 maxSquare = curHeight * (end - start);
-
 
             if (height[start] <= height[end]) ++start;
             else --end;
@@ -432,18 +431,67 @@ public:
         }
 
         return maxSquare;
-
     }
 };
+#endif
+
+//12. Integer to Roman
+#ifdef INT_TO_ROMAN
+class Solution {
+public:
+    std::string intToRoman(int num) {
+
+        std::string res;
+
+        std::vector<std::pair<int, std::string>> romanianNums {{1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"}, {100, "C"}, {90, "XC"}, {50, "L"},
+                                                               {40, "XL"}, {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}};
 
 
+        for (auto& el : romanianNums) {
+            while (num - el.first >= 0) {
+                num -= el.first;
+                res += el.second;
+            }
+        }
+
+        return res;
+    }
+};
+#endif
+
+
+//13. Roman to Integer
+#ifdef ROMAN_TO_INT
+class Solution {
+public:
+    int romanToInt(std::string s) {
+        std::unordered_map<char, uint16_t> romanianNums {{'M', 1000}, {'D', 500}, {'C', 100,},
+                                                         {'L', 50}, {'X', 10}, {'V', 5}, {'I', 1}};
+
+        uint8_t size = s.size();
+        uint32_t res = 0;
+
+        for (uint8_t i = 0; i < size; ++i) {
+            if (romanianNums[s[i]] < romanianNums[s[i + 1]]) {
+                res += romanianNums[s[i + 1]] - romanianNums[s[i]];
+                ++i;
+            }
+            else {
+                res += romanianNums[s[i]];
+            }
+        }
+        return res;
+    }
+};
+#endif
 
 int main() {
 
 
-    std::vector<int> vec = {1,3,2,5,25,24,5};
+    std::string test ("DXI");
+    int num = 583;
     Solution sol;
-    uint32_t res = sol.maxArea(vec);
+    int res = sol.romanToInt(test);
     std::cout << res;
 
     return 0;
