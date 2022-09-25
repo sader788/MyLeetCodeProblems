@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include <array>
 #include <cstdlib>
+#include <cmath>
 
 // 1.two sum
 #ifdef TWO_SUM
@@ -172,7 +173,6 @@ public:
 };
 #endif
 
-
 // 5. Longest Palindromic Substring
 #ifdef LONGEST_PALINDROMIC
 class Solution {
@@ -262,7 +262,6 @@ public:
     }
 };
 #endif
-
 
 // 7. Reverse Integer
 #ifdef REVERSE_INTEGER
@@ -485,14 +484,112 @@ public:
 };
 #endif
 
+// 14. Longest Common Prefix
+#ifdef LONGEST_PREFIX
+class Solution {
+public:
+    std::string longestCommonPrefix(std::vector<std::string>& strs) {
+        size_t strsSize = strs.size() - 1;
+
+        std::string prefix = strs[0];
+
+        for (uint8_t i = 1; i < strsSize; ++i) {
+            uint8_t j = 0;
+
+            uint8_t prefixSize = prefix.size();
+
+            while (prefix[j] == strs[i][j] && j != prefixSize) ++j;
+            prefix = prefix.substr(0, j);
+        }
+        return prefix;
+    }
+};
+#endif
+
+// 15. 3Sum
+#ifdef THREE_SUM
+class Solution {
+public:
+    std::vector<std::vector<int>> threeSum(std::vector<int>& nums) {
+        std::sort(nums.begin(), nums.end());
+
+        std::vector<std::vector<int>> res;
+
+        uint16_t size = nums.size() - 1;
+
+        for (uint16_t i = 0; i < size; ++i) {
+            uint16_t start = i + 1;
+            uint16_t end = size;
+
+            while (start < end) {
+                if (end == i) break;
+
+                int32_t sum = nums[start] + nums[i] + nums[end];
+
+                if (sum == 0 && start != i && end != i) {
+                    res.push_back({{nums[i], nums[start], nums[end]}});
+                    int32_t prev = nums[start];
+                    while(nums[start] == prev && start < end) ++start;
+                }
+                else if (sum < 0)
+                    ++start;
+                else if (sum > 0)
+                    --end;
+            }
+            int32_t prev = nums[i];
+
+            while(nums[i + 1] == prev && (i + 1) != size) ++i;
+        }
+        return res;
+    }
+};
+#endif
+
+class Solution {
+public:
+    int threeSumClosest(std::vector<int>& nums, int target) {
+
+        std::sort(nums.begin(), nums.end());
+
+        int32_t closetSum = 20000;
+
+
+        uint16_t size = nums.size() - 1;
+
+        for (uint16_t i = 0; i < size; ++i) {
+            uint16_t start = i + 1;
+            uint16_t end = size;
+
+            while (start < end) {
+                int32_t sum = nums[start] + nums[i] + nums[end];
+
+                if (sum == target)
+                    return closetSum;
+                if (abs(target - sum) < abs(target - closetSum)) {
+                    closetSum = sum; ++start;
+                }
+                else if (sum < target)
+                    ++start;
+                else
+                    --end;
+            }
+        }
+        return closetSum;
+    }
+};
+
 int main() {
+
+std::vector<int> d = {833,736,953,-584,-448,207,128,-445,126,248,871,860,333,-899,463,488,-50,-331,903,575,265,162,-733,648,678,549,579,-172,-897,562,-503,-508,858,259,-347,-162,-505,-694,300,-40,-147,383,-221,-28,-699,36,-229,960,317,-585,879,406,2,409,-393,-934,67,71,-312,787,161,514,865,60,555,843,-725,-966,-352,862,821,803,-835,-635,476,-704,-78,393,212,767,-833,543,923,-993,274,-839,389,447,741,999,-87,599,-349,-515,-553,-14,-421,-294,-204,-713,497,168,337,-345,-948,145,625,901,34,-306,-546,-536,332,-467,-729,229,-170,-915,407,450,159,-385,163,-420,58,869,308,-494,367,-33,205,-823,-869,478,-238,-375,352,113,-741,-970,-990,802,-173,-977,464,-801,-408,-77,694,-58,-796,-599,-918,643,-651,-555,864,-274,534,211,-910,815,-102,24,-461,-146};
+
+    int res;
 
 
     std::string test ("DXI");
     int num = 583;
     Solution sol;
-    int res = sol.romanToInt(test);
-    std::cout << res;
+    res = sol.threeSumClosest(d, -2960);
+    //std::cout << res;
 
     return 0;
 }
